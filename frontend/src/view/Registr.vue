@@ -1,5 +1,6 @@
 <template>
     <div class="content">
+       <v-notification :messages="statusMsg"></v-notification>
         <div class="container">
             
             <div class="row">
@@ -14,7 +15,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-8 col-8 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-group">
                         <label for="login" class="label">Email</label>
-                        <input type="email" class="form-control form-control-lg" id="login"   placeholder="Введите email">
+                        <input type="email" class="form-control form-control-lg" id="login" v-model="email"  placeholder="Введите email">
                     </div>
                 </div>
             </div>
@@ -22,7 +23,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-8 col-8 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-group">
                         <label for="name" class="label">Имя</label>
-                        <input type="text" class="form-control form-control-lg" id="name"   placeholder="Введите имя">
+                        <input type="text" class="form-control form-control-lg" id="name" v-model="name" placeholder="Введите имя">
                     </div>
                 </div>
             </div>
@@ -30,10 +31,19 @@
                  <div class="col-lg-4 col-md-6 col-sm-8 col-8 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-group">
                         <label for="pass" class="label">Пароль</label>
-                        <input type="password" class="form-control form-control-lg" id="pass" placeholder="Введите пароль">
+                        <input type="password" class="form-control form-control-lg" id="pass" v-model="pass" placeholder="Введите пароль">
                     </div>
                 </div>
             </div>
+            <!-- <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-10 col-10 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
+                    <transition name="fade">
+                        <p >
+                            {{statusMsg}}
+                        </p>
+                    </transition>
+                </div>
+            </div> -->
             <div class="row mt-4">
                 <div class="col-lg-2 col-md-3 col-sm-4 col-4 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-check">
@@ -44,20 +54,71 @@
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-6 col-6">
-                    <button type="submit" class="btn"><span class="text-in-button">Записать</span></button>
+                    <button type="submit" @click=" send(); " class="btn"><span class="text-in-button">Записать</span></button>
                 </div>
             </div>
-            
-            <!-- <img src="../assets/cardBackground.png" class="img-fluid mx-auto d-block" alt=""> -->
-
-            
+            <!-- <img src="../assets/cardBackground.png" class="img-fluid mx-auto d-block" alt=""> --> 
         </div>
     </div>
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import vNotification from '../components/v-notification'
+ 
+Vue.use(VueAxios, axios)
 
+export default {
+    name: "Registr",
+    data(){
+        return{
+            name: "",
+            email: "",
+            pass: "",
+            statusMsg: [],
+            isError: false,
+            statusMessages:[
+                {text: "Неверно ввелен логин", id: Date.now().toLocaleString()},
+                {text: "Неверно ввелен логин", id: Date.now().toLocaleString()},
+                {text: "Неверно ввелен логин", id: Date.now().toLocaleString()},
+            ]
+        }
+    },
+    components:{
+        vNotification 
+    },
+    methods: {
+        addStatusMsg(listMes, status="error"){
+            for (var i = 0; i < listMes.length; i++)
+                setTimeout(this.addMess,500*i,listMes,i,status)
+        },
+        addMess(listMes, i, status ){
+            this.statusMsg.push({text: listMes[i], status: status, id: Date.now().toLocaleString()});
+        },
+        send(){
+            axios.post("http://127.0.0.1:5000/registr",{
+                name: this.name,
+                email: this.email,
+                pass: this.pass
+            })
+            .then((response) =>{
+                if (response.data.status == "success"){
+                    this.addStatusMsg(["Регистрация успешна!"], "success")
+                    setTimeout(()=>this.$router.push('/login'),5000)
+                    this.isError = false
+                }
+                else{
+                    this.isError = true
+                    this.addStatusMsg(response.data.errorMsg)
+                }
+            }).catch(() => {
+                this.isError = true
+                this.addStatusMsg(["Соединение с сервером не установлено"])
+            })
+        },
+    }
 }
 </script>
 
@@ -77,7 +138,12 @@ export default {
         
         
     }
-    
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+        opacity: 0;
+    }
     
     h1{
         font-family: 'Montserrat', sans-serif;

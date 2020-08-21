@@ -14,7 +14,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-8 col-8 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-group">
                         <label for="login" class="label">Логин</label>
-                        <input type="email" class="form-control form-control-lg" id="login"   placeholder="Введите логин">
+                        <input type="email" class="form-control form-control-lg" id="login" v-model="email"  placeholder="Введите логин">
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                  <div class="col-lg-4 col-md-6 col-sm-8 col-8 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-group">
                         <label for="pass" class="label">Пароль</label>
-                        <input type="password" class="form-control form-control-lg" id="pass" placeholder="Введите пароль">
+                        <input type="password" class="form-control form-control-lg" v-model="pass" id="pass" placeholder="Введите пароль">
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-6 col-6">
-                    <button type="submit" class="btn"><span class="text-in-button">Войти</span></button>
+                    <button type="submit" class="btn" @click="send"><span class="text-in-button">Войти</span></button>
                 </div>
             </div>
             
@@ -48,10 +48,49 @@
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+ 
+Vue.use(VueAxios, axios)
 
+export default {
+    name: "login",
+    data(){
+        return{
+            email: " ",
+            pass: " "
+            
+        }
+    },
+    methods: {
+        send(){
+            axios.post("http://127.0.0.1:5000/login",{
+                email: this.email,
+                pass: this.pass
+            })
+            .then((response) =>{
+                if (response.data.status == "success" && response.data.authorizated == true && response.data.pass == true ){
+                    this.$router.push('/')
+                    alert(response.data.status)
+                    alert(response.data.authorizated)
+                    alert(response.data.pass)
+                }
+                else{
+                    alert(response.data.status)
+                    alert(response.data.authorizated)
+                    alert(response.data.pass)
+                }
+
+            })
+            
+              
+        }   
+    }
+       
 }
 </script>
+
 
 <style scoped>
     .content{
