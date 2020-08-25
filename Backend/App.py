@@ -3,16 +3,25 @@ from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import config
+from flask_login import LoginManager, login_user, login_required
 
 from pymongo import MongoClient
-
+from moduls import User
 app = Flask(__name__)
 CORS(app)
+
+Login_manager = LoginManager()
+Login_manager.init_app(app)
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.todoApp
 login = db.login
 
+app.config['SECRET_KEY']='secret'
+
+@LoginManager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 def isLoginValid(login, msg):
     status = "success"
@@ -67,18 +76,27 @@ def isLogin():
     _email = data.get("email")
     _pass = data.get("pass")
     try:
-        user = login.find_one({"email" : _email})
-        print(bool(user))
-        if user:
-            if (check_password_hash(user["password"] , _pass)):
-                return jsonify({"status": "success", "authorizated":True, "pass": True})
+        res = login.find_one({"email" : _email})
+        if res:
+            if (check_password_hash(res["password"] , _pass)):
+                user = User().create(res)
+                login_user(user)
+                return responseMapper("success","Успешно авторизован!")
             else:
-                return jsonify({"status" : "success", "authorizated": True, "pass": False})
+                return responseMapper("error","Пароль не верный!")
         else:
-            return jsonify({"status" : "success", "authorizated": False, "pass": False})        
+            return responseMapper("error","Пользователь не найден!")       
     except:
-        return jsonify({"status" : "error", "authorizated": False, "pass": False}),400
+        return responseMapper("error","Соединение с сервером не установлено!"),400
 
+
+@app.route("/isAuth")
+@login_required
+def isAuth():
+    print("dsssssssssssssssdfsdfsf")
+    return jsonify({
+        "isAuth":True
+    })
     
 def responseMapper(status, errMessage="ok"):
     return jsonify({

@@ -35,15 +35,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-10 col-10 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
-                    <transition name="fade">
-                        <p >
-                            {{statusMsg}}
-                        </p>
-                    </transition>
-                </div>
-            </div> -->
             <div class="row mt-4">
                 <div class="col-lg-2 col-md-3 col-sm-4 col-4 offset-lg-4 offset-md-3 offset-sm-2 offset-2">
                     <div class="form-check">
@@ -57,7 +48,6 @@
                     <button type="submit" @click=" send(); " class="btn"><span class="text-in-button">Записать</span></button>
                 </div>
             </div>
-            <!-- <img src="../assets/cardBackground.png" class="img-fluid mx-auto d-block" alt=""> --> 
         </div>
     </div>
 </template>
@@ -77,13 +67,7 @@ export default {
             name: "",
             email: "",
             pass: "",
-            statusMsg: [],
-            isError: false,
-            statusMessages:[
-                {text: "Неверно ввелен логин", id: Date.now().toLocaleString()},
-                {text: "Неверно ввелен логин", id: Date.now().toLocaleString()},
-                {text: "Неверно ввелен логин", id: Date.now().toLocaleString()},
-            ]
+            statusMsg: [],  
         }
     },
     components:{
@@ -107,14 +91,11 @@ export default {
                 if (response.data.status == "success"){
                     this.addStatusMsg(["Регистрация успешна!"], "success")
                     setTimeout(()=>this.$router.push('/login'),5000)
-                    this.isError = false
                 }
                 else{
-                    this.isError = true
                     this.addStatusMsg(response.data.errorMsg)
                 }
             }).catch(() => {
-                this.isError = true
                 this.addStatusMsg(["Соединение с сервером не установлено"])
             })
         },

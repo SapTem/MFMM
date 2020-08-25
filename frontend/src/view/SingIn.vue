@@ -58,8 +58,8 @@ export default {
     name: "login",
     data(){
         return{
-            email: " ",
-            pass: " "
+            email: "",
+            pass: ""
             
         }
     },
@@ -70,18 +70,16 @@ export default {
                 pass: this.pass
             })
             .then((response) =>{
-                if (response.data.status == "success" && response.data.authorizated == true && response.data.pass == true ){
-                    this.$router.push('/')
-                    alert(response.data.status)
-                    alert(response.data.authorizated)
-                    alert(response.data.pass)
+                if (response.data.status == "success"){
+                    this.$router.push('/home')
                 }
                 else{
                     alert(response.data.status)
-                    alert(response.data.authorizated)
-                    alert(response.data.pass)
+                    alert(response.data.errorMsg)
                 }
 
+            }).catch(() => {
+                alert("пизда")
             })
             
               

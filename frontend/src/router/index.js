@@ -5,6 +5,7 @@ import Header from '../layouts/AppLayout.vue'
 import Start from '../view/Start.vue'
 import SingIn from '../view/SingIn.vue'
 import Registr from '../view/Registr.vue'
+import Home from '../view/Home.vue'
 
 
 Vue.use(VueRouter)
@@ -29,7 +30,11 @@ const routes = [
                 name: 'registr',
                 component: Registr
             }
-        ]
+        ],
+    },
+    {
+        path:'/home',
+        component: Home
     }
 ]
 
