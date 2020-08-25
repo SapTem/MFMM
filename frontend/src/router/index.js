@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Header from '../layouts/AppLayout.vue'
+import StartHeader from '../layouts/StartHeader.vue'
 import Start from '../view/Start.vue'
 import SingIn from '../view/SingIn.vue'
 import Registr from '../view/Registr.vue'
+import HomeHeader from '../layouts/HomeHeader.vue'
 import Home from '../view/Home.vue'
 
 
@@ -13,28 +14,35 @@ Vue.use(VueRouter)
 const routes = [
     {
         path:'/',
-        component: Header,
+        component: StartHeader,
         children:[
             {
-                path: '/',
+                path: '',
                 name: 'start',
                 component: Start
             },
             {
-                path: '/login',
+                path: 'login',
                 name: 'login',
                 component: SingIn
             },
             {
-                path: '/registr',
+                path: 'registr',
                 name: 'registr',
                 component: Registr
             }
-        ],
+        ]
     },
     {
         path:'/home',
-        component: Home
+        component: HomeHeader,
+        children:[
+            {
+                path: '',
+                name: 'home',
+                component: Home
+            }
+        ]
     }
 ]
 
