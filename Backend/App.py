@@ -19,9 +19,9 @@ login = db.login
 
 app.config['SECRET_KEY']='secret'
 
-@LoginManager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
+# @LoginManager.user_loader
+# def load_user(user_id):
+#     return User.get(user_id)
 
 def isLoginValid(login, msg):
     status = "success"
