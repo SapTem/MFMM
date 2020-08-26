@@ -53,10 +53,10 @@ function isAuth(to, from, next){
         "access_tocken": localStorage.getItem("access_tocken")
         })
         .then((response) => {
-            if (response.data.status == "Auth"){
+            if (response.data.status == "auth"){
                 next()
             }else{
-                next("/")
+                next("/login")
             }
         }).catch(() => {
             next("/")

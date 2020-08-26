@@ -8,7 +8,7 @@
       :key="message.id"
       :class="message.status"
     >
-      <span>{{message.text}}</span>
+      <span calss="textMsg">{{message.text}}</span>
       <i class="material-icons">{{message.status == "error" ? "error" : "info" }}</i>
 
     </div>
@@ -75,10 +75,15 @@
       margin-bottom: 16px;
   }
   .error{
-    background: rgb(240, 35, 45);
+    background: rgb(240, 68, 76);
   }
   .success{
     background: rgb(0, 161, 40);
+  }й
+  
+  .textMsg{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
   }
   .block-list{
     display: flex;

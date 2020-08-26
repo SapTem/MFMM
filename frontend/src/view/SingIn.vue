@@ -1,7 +1,7 @@
 <template>
     <div class="content">
+        <v-notification :messages="statusMsg"></v-notification>
         <div class="container">
-            
             <div class="row">
                 <div class="col-xl-2  offset-lg-3 offset-md-2  offset-sm-1 offset-1 col-lg-2 col-md-3 col-sm-4 col-4">
                     <img src="../assets/Logo.png" class="logo">
@@ -39,10 +39,6 @@
                     <button type="submit" class="btn" @click="send"><span class="text-in-button">Войти</span></button>
                 </div>
             </div>
-            
-            <!-- <img src="../assets/cardBackground.png" class="img-fluid mx-auto d-block" alt=""> -->
-
-            
         </div>
     </div>
 </template>
@@ -51,6 +47,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import vNotification from "../components/v-notification"
  
 Vue.use(VueAxios, axios)
 
@@ -59,11 +56,21 @@ export default {
     data(){
         return{
             email: "",
-            pass: ""
-            
+            pass: "",
+            statusMsg: [],
         }
     },
+    components:{
+        vNotification 
+    },
     methods: {
+        addStatusMsg(listMes, status="error"){
+            for (var i = 0; i < listMes.length; i++)
+                setTimeout(this.addMess,500*i,listMes,i,status)
+        },
+        addMess(listMes, i, status ){
+            this.statusMsg.push({text: listMes[i], status: status, id: Date.now().toLocaleString()});
+        },
         send(){
             axios.post("http://127.0.0.1:5000/login",{
                 email: this.email,
@@ -73,16 +80,15 @@ export default {
                 if (response.data.status == "success"){
                     this.email=""
                     this.pass=""
+                    this.addStatusMsg(["Регистрация успешна!"], "success")
                     localStorage.setItem("access_tocken",response.data.access_tocken)
-                    this.$router.push('/home')
+                    setTimeout(()=>this.$router.push('/home'),2000)
                 }
                 else{
-                    alert(response.data.status)
-                    alert(response.data.errorMsg)
+                    this.addStatusMsg(response.data.errorMsg)
                 }
-
             }).catch(() => {
-                alert("пизда")
+                alert("Нет соединения с сервером!")
             })
         }   
     }

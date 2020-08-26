@@ -93,7 +93,7 @@ export default {
                     this.email=""
                     this.pass=""
                     this.addStatusMsg(["Регистрация успешна!"], "success")
-                    setTimeout(()=>this.$router.push('/login'),5000)
+                    setTimeout(()=>this.$router.push('/login'),2000)
                 }
                 else{
                     this.addStatusMsg(response.data.errorMsg)

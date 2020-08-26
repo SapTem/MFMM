@@ -4,6 +4,13 @@ invalidLoginLen = "Недопустимая длина логина! "
 invalidPassLen = "Недопустимая длина пароля! "
 invalidNameLen = "Недопустимая длина имени! "
 invalidPassSpace = "Пробелы в пароле недопустимы! "
+invalidPass = "Пароль не верный!"
+undefinedUser = "Пользователь не найден!"
+serverErr = "Нет соединения с базой данных!"
+
+#success message
+successAuth = "Успешно авторизован!"
+
 #important simbol in login
 logValid = "@."
 
@@ -16,3 +23,13 @@ maxPassLen = 31
 
 minNameLen = 2
 maxNameLen = 31
+
+#key for valid form
+reg = "registr"
+log = "login"
+auth = "auth"
+
+#result of operation
+ok = "success"
+err = "error"
+
