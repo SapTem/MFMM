@@ -4,24 +4,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import config
 from flask_login import LoginManager, login_user, login_required
-
 from pymongo import MongoClient
-from moduls import User
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import create_access_token
+
 app = Flask(__name__)
 CORS(app)
 
-Login_manager = LoginManager()
-Login_manager.init_app(app)
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.todoApp
-login = db.login
+jwt = JWTManager(app)
 
 app.config['SECRET_KEY']='secret'
 
-# @LoginManager.user_loader
-# def load_user(user_id):
-#     return User.get(user_id)
 
 def isLoginValid(login, msg):
     status = "success"
@@ -62,7 +58,7 @@ def registr():
     status = ("success" if statuslog == statusPass == statusName == "success" else  "error")
     print(status,msg)
     if status == "success":
-        login.insert_one({
+        db.login.insert_one({
             "name":data.get("name"),
             "email":data.get("email"),
             "password": generate_password_hash(data.get("pass"))
@@ -76,12 +72,18 @@ def isLogin():
     _email = data.get("email")
     _pass = data.get("pass")
     try:
-        res = login.find_one({"email" : _email})
+        res = db.login.find_one({"email" : _email})
         if res:
-            if (check_password_hash(res["password"] , _pass)):
-                user = User().create(res)
-                login_user(user)
-                return responseMapper("success","Успешно авторизован!")
+            if check_password_hash(res["password"] , _pass):
+                access_tocken = create_access_token(identity={
+                    "name":_email,
+                    "pass": _pass
+                }) 
+                db.tocken.insert_one({
+                    "email": _email,
+                    "tocken": access_tocken
+                })
+                return responseMapper("success","Успешно авторизован!", access_tocken)
             else:
                 return responseMapper("error","Пароль не верный!")
         else:
@@ -89,19 +91,12 @@ def isLogin():
     except:
         return responseMapper("error","Соединение с сервером не установлено!"),400
 
-
-@app.route("/isAuth")
-@login_required
-def isAuth():
-    print("dsssssssssssssssdfsdfsf")
-    return jsonify({
-        "isAuth":True
-    })
     
-def responseMapper(status, errMessage="ok"):
+def responseMapper(status, errMessage="ok", access_tocken=''):
     return jsonify({
         "status" : status,
-        "errorMsg": errMessage
+        "errorMsg": errMessage,
+        "access_tocken": access_tocken
     })
 
 
