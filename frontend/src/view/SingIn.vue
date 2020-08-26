@@ -71,6 +71,7 @@ export default {
             })
             .then((response) =>{
                 if (response.data.status == "success"){
+                    localStorage.setItem("access_tocken",response.data.access_tocken)
                     this.$router.push('/home')
                 }
                 else{
@@ -81,8 +82,6 @@ export default {
             }).catch(() => {
                 alert("пизда")
             })
-            
-              
         }   
     }
        

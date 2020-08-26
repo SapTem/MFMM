@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isAuthorization">
         <div class="container-fluid">
             <div class="row allContent">
                 <div class="col-2 leftBlock ">
@@ -33,10 +33,13 @@ export default {
     name:"Home",
     data(){
         return{
-            // isAuthorization: false
+            isAuthorization: false
         }
     },
     methods:{
+        isAuth(){
+            this.isAuthorization = localStorage.getItem("access_tocken")
+        }
         // isAuth(){
         //     axios.get("http://127.0.0.1:5000/isAuth")
         //     .then((response) => {
@@ -50,9 +53,9 @@ export default {
         //     })
         // }
     },
-    // created(){
-    //     this.isAuth();
-    // }
+    created(){
+        this.isAuth();
+    }
 }
 </script>
 
