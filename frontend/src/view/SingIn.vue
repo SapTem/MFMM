@@ -71,6 +71,8 @@ export default {
             })
             .then((response) =>{
                 if (response.data.status == "success"){
+                    this.email=""
+                    this.pass=""
                     localStorage.setItem("access_tocken",response.data.access_tocken)
                     this.$router.push('/home')
                 }

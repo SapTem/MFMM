@@ -89,6 +89,9 @@ export default {
             })
             .then((response) =>{
                 if (response.data.status == "success"){
+                    this.name=""
+                    this.email=""
+                    this.pass=""
                     this.addStatusMsg(["Регистрация успешна!"], "success")
                     setTimeout(()=>this.$router.push('/login'),5000)
                 }

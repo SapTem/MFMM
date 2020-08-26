@@ -91,7 +91,22 @@ def isLogin():
     except:
         return responseMapper("error","Соединение с сервером не установлено!"),400
 
+
+@app.route("/isAuth", methods=["POST"])
+def isAuth():
+    print(request.get_json().get("access_tocken"))
+    if db.tocken.find_one({"tocken": request.get_json().get("access_tocken")}):
+        return responseMapper("Auth")
+    else:
+        return responseMapper("Error","noAuth")
+
+
+@app.route("/logOut", methods=["POST"])
+def logOut():
+    access_tocken = request.get_json().get("access_tocken")
+    db.tocken.delete_many({"tocken": access_tocken})
     
+
 def responseMapper(status, errMessage="ok", access_tocken=''):
     return jsonify({
         "status" : status,
