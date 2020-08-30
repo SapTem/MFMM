@@ -37,7 +37,7 @@ const routes = [
     {
         path:'/home',
         component: HomeHeader,
-        beforeEnter: isAuth,
+        // beforeEnter: isAuth,
         children:[
             {
                 path: '',
@@ -48,20 +48,20 @@ const routes = [
     }
 ]
 
-function isAuth(to, from, next){
-    axios.post("http://127.0.0.1:5000/isAuth",{
-        "access_tocken": localStorage.getItem("access_tocken")
-        })
-        .then((response) => {
-            if (response.data.status == "auth"){
-                next()
-            }else{
-                next("/login")
-            }
-        }).catch(() => {
-            next("/")
-        })
-}
+// function isAuth(to, from, next){
+//     axios.post("http://127.0.0.1:5000/isAuth",{
+//         "access_tocken": localStorage.getItem("access_tocken")
+//         })
+//         .then((response) => {
+//             if (response.data.status == "auth"){
+//                 next()
+//             }else{
+//                 next("/login")
+//             }
+//         }).catch(() => {
+//             next("/")
+//         })
+// }
 
 const router = new VueRouter({
     routes

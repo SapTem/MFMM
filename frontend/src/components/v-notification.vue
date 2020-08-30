@@ -79,7 +79,7 @@
   }
   .success{
     background: rgb(0, 161, 40);
-  }й
+  }
   
   .textMsg{
     font-family: 'Montserrat', sans-serif;
