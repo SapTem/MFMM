@@ -10,6 +10,7 @@ serverErr = "Нет соединения с базой данных!"
 
 #success message
 successAuth = "Успешно авторизован!"
+successDeleted = "Успешно удален!"
 
 #important simbol in login
 logValid = "@."
