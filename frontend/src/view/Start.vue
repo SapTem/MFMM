@@ -93,17 +93,17 @@ export default {
     }
     .graphic-img{
         height:  300px;
-   }
-   .todo-list-img{
-       height:  450px;
-   }
-   .friend-img{
+    }
+    .todo-list-img{
+        height:  450px;
+    }
+    .friend-img{
        height:  300px;
-   }
-   a{
+    }
+    a{
        margin:0;
        padding: 12px;
-   }
+    }
     @media (max-width: 991px) {
         .offer-design{
             margin-bottom: 20px;

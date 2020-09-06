@@ -9,7 +9,7 @@
       :class="message.status"
     >
       <span calss="textMsg">{{message.text}}</span>
-      <i class="material-icons">{{message.status == "error" ? "error" : "info" }}</i>
+      <i class="material-icons">{{message.status == "error" ? "error" : "done" }}</i>
 
     </div>
     </transition-group >
@@ -21,12 +21,6 @@
   export default {
     name:'v-notification',
     props:{
-      status:{
-        type:String,
-        default: function(){
-          return "error"
-        }
-      },
       messages:{
         type: Array,
         default: function(){
