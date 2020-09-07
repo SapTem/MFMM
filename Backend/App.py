@@ -63,6 +63,7 @@ def registr():
     data = request.get_json()
     status, msg = isFormValid(config.reg, data.get("email"), data.get("pass"), data.get("name"))
     if status == config.ok:
+        msg = config.successAuth
         db.login.insert_one({
             "name":data.get("name"),
             "email":data.get("email"),

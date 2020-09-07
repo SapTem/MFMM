@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-6 col-6">
-                    <button type="submit" @click=" send(); " class="btn"><span class="text-in-button">Записать</span></button>
+                    <button type="submit" @click="send(); " class="btn"><span class="text-in-button">Записать</span></button>
                 </div>
             </div>
         </div>
@@ -82,27 +82,30 @@ export default {
             this.statusMsg.push({text: listMes[i], status: status, id: Date.now().toLocaleString()});
         },
         send(){
-            axios.post("http://127.0.0.1:5000/registr",{
-                name: this.name,
-                email: this.email,
-                pass: this.pass
-            })
-            .then((response) =>{
-                if (response.data.status == "success"){
-                    this.name=""
-                    this.email=""
-                    this.pass=""
-                    this.addStatusMsg(["Регистрация успешна!"], "success")
-                    setTimeout(()=>this.$router.push('/login'),2000)
-                }
-                else{
-                    this.addStatusMsg(response.data.errorMsg)
-                }
-            }).catch(() => {
-                this.addStatusMsg(["Соединение с сервером не установлено"])
+            this.$store.dispatch("REGISTR", {
+                pass : this.pass,
+                email : this.email,
+                name : this.name
             })
         },
+        getSatusMsg(){
+            let notification = this.$store.getters.STATUS_MSG
+            this.addStatusMsg(notification.statusMessages, notification.status)
+        }
+    },
+    computed : {
+        isLoading(){
+            return this.$store.state.isLoading
+        }
+    },
+    watch : {
+        isLoading : function(){
+            if (this.$store.getters.IS_LOADING == false){
+                this.getSatusMsg()
+            }
+        }
     }
+
 }
 </script>
 
